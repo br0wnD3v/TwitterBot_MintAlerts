@@ -11,21 +11,19 @@ const T = new Twit({
   access_token_secret: process.env.TWT_ACCESS_SECRET,
 });
 
+const provider = new ethers.providers.JsonRpcProvider(
+  "https://arb1.arbitrum.io/rpc"
+);
+
+// Create an instance of your Arbitrum contract
+const contract = new ethers.Contract(contractAddress, contractABI, provider);
+
 export default async function handler(req, res) {
-  if (req.method === "UPDATE") {
+  if (req.method == "DELETE") {
+    contract.stop();
+  }
+  if (req.method == "UPDATE") {
     try {
-      // Connect to the Arbitrum network
-      const provider = new ethers.providers.JsonRpcProvider(
-        "https://arb1.arbitrum.io/rpc"
-      );
-
-      // Create an instance of your Arbitrum contract
-      const contract = new ethers.Contract(
-        contractAddress,
-        contractABI,
-        provider
-      );
-
       // Set up the event listener
       contract.on(
         "ChallengeSolved",

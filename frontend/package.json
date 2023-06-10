@@ -9,11 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "dotenv": "^16.1.4",
     "eslint": "8.42.0",
     "eslint-config-next": "13.4.4",
     "ethers": "^6.5.1",
     "next": "13.4.4",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "twit": "^2.2.11"
   }
 }

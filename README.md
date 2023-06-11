@@ -23,4 +23,4 @@
 ## Step 4
 
 - After done with everything open your terminal and run `yarn dev`. This will start the server which will continue to listen for the event mentioned in the checkAndUpdate API endpoint for the application. (After running the webapp for the first time you need to call the endpoint with POST method to enable the listener and keep it running until the server is active.)
-- After you'll be done, anytime the `ChallengeSolved` event in this example is emitted the server will call the twitter API and send the tweet congratulating the Twitter Handle mentioned in the event itself.
+- After you'll be done, anytime the `ChallengeSolved` event (in this example. To change, edit the checkAndUpdate file and make sure you have the event definition in your contract's ABI too.) is emitted the server will call the twitter API and send the tweet congratulating the Twitter Handle mentioned in the event itself.

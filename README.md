@@ -18,7 +18,7 @@
 
 ## Step 3
 
-- Add a .env file at the root of your frontend/ and add the 4 variables being called as process.env.\* (These are r required for the twitter api).
+- Add a .env file at the root of your frontend/ and add the 4 variables being imported as process.env.\* in the api/checkAndUpdate.js under pages/ (These are twitter api's keys generated with each developer account).
 
 ## Step 4
 

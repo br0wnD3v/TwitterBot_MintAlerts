@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-import Twit from "twit";
+import twitter from "twitter-lite";
 
 import { ethers } from "ethers";
 
@@ -12,14 +12,14 @@ import {
 const twitterConfig = {
   consumer_key: process.env.TWT_API_KEY,
   consumer_secret: process.env.TWT_API_SECRET,
-  access_token: process.env.TWT_ACCESS_TOKEN,
+  access_token_key: process.env.TWT_ACCESS_TOKEN,
   access_token_secret: process.env.TWT_ACCESS_SECRET,
 };
-const twitterClient = new Twit(twitterConfig);
+const twitterClient = new twitter(twitterConfig);
 
 const provider = new ethers.providers.JsonRpcProvider(chainToRPC["mumbai"]);
 
-// Create an instance of your Arbitrum contract
+// Create an instance of your contract.
 const contract = new ethers.Contract(
   contractAddresses["mumbai"],
   contractABI,
@@ -33,29 +33,20 @@ export default async function handler(req, res) {
   if (req.method == "POST") {
     try {
       // Set up the event listener
-      contract.on(
-        "ChallengeSolved",
-        async (receiver, sender, twitterHandle) => {
-          console.log("Receiver:", receiver);
-          console.log("Sender:", sender);
-          console.log("Twitter Handle:", twitterHandle, "\n");
-          const tweetMessage = `Congratulations to ${twitterHandle} as they are being rewarded an exclusive NFT on Mumbai Testnet which was made available after completing a series of challenges. Special thanks to CyfrinAudits for making this happen! :) For further details visit https://mumbai.polygonscan.com/address/${contractAddresses["mumbai"]}`;
+      contract.on("MintedToken", async (caller, twitterHandle) => {
+        console.log("Caller:", caller);
+        console.log("Twitter Handle:", twitterHandle, "\n");
+        const tweetMessage = `Congratulations to ${twitterHandle} for minting an NFT at ${contractAddresses["mumbai"]}. For further details visit https://mumbai.polygonscan.com/address/${contractAddresses["mumbai"]}`;
 
-          try {
-            twitterClient.post(
-              "statuses/update",
-              { status: tweetMessage },
-              (error, tweet, response) => {
-                if (error) {
-                  console.log("Got error:", error);
-                } else console.log("Tweeted Successfully");
-              }
+        twitterClient
+          .post("statuses/update", { status: tweetMessage })
+          .then((result) => {
+            console.log(
+              'You successfully tweeted this : "' + result.text + '"'
             );
-          } catch (error) {
-            console.error(error);
-          }
-        }
-      );
+          })
+          .catch(console.error);
+      });
 
       res.status(200).json({ message: "Event listener started successfully." });
     } catch (error) {
